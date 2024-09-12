@@ -37,7 +37,7 @@ class MoveToOperation extends PathOperation {
     this.y = y;
   }
 
-  toFlutterCommand(round = 2) {
+  toFlutterCommand(round) {
     const x = this.createSizeDependentToken('width', this.x, round);
     const y = this.createSizeDependentToken('height', this.y, round);
 
@@ -52,7 +52,7 @@ class LineToOperation extends PathOperation {
     this.y = y;
   }
 
-  toFlutterCommand(round = 2) {
+  toFlutterCommand(round) {
     const x = this.createSizeDependentToken('width', this.x, round);
     const y = this.createSizeDependentToken('height', this.y, round);
 
@@ -71,7 +71,7 @@ class CubicToOperation extends PathOperation {
     this.y3 = y3;
   }
 
-  toFlutterCommand(round = 2) {
+  toFlutterCommand(round) {
     const x1 = this.createSizeDependentToken('width', this.x1, round);
     const y1 = this.createSizeDependentToken('height', this.y1, round);
     const x2 = this.createSizeDependentToken('width', this.x2, round);
@@ -91,7 +91,7 @@ class AddOvalOperation extends PathOperation {
     this.radius = radius;
   }
 
-  toFlutterCommand(round = 2) {
+  toFlutterCommand(round) {
     const x = this.createSizeDependentToken('width', this.x, round);
     const y = this.createSizeDependentToken('height', this.y, round);
     const radius = this.createSizeDependentToken('width', this.radius, round);
@@ -168,7 +168,7 @@ class FlutterCustomPaintPrinter {
       }
 
       path.operations.forEach((operation) => {
-        linesPaths.push(`\t\t${operation.toFlutterCommand()}`);
+        linesPaths.push(`\t\t${operation.toFlutterCommand(config.decimals)}`);
       });
 
       if (path.paintType == PaintType.Stroke && path.closed) {
@@ -190,7 +190,7 @@ class FlutterCustomPaintPrinter {
         linesPaths.push('');
         linesPaths.push('\t\tList<PathMetric> pathMetrics = path.computeMetrics().toList();');
         linesPaths.push('');
-        
+
         linesPaths.push('\t\tfinal numberOfOperations = pathMetrics.length;');
         linesPaths.push('\t\tfinal singleOperationTime = 1.0 / numberOfOperations;');
         linesPaths.push('\t\tfinal index = (progress / singleOperationTime).floor();');
@@ -206,8 +206,8 @@ class FlutterCustomPaintPrinter {
         linesPaths.push('\t\t\t\tcanvas.drawPath(extractPath, paint);');
         linesPaths.push('\t\t\t}');
         linesPaths.push('\t\t}');
-        
-        linesPaths.push('');      
+
+        linesPaths.push('');
 
         linesPaths.push('\t\tif(index >= numberOfOperations) {');
         linesPaths.push('\t\t\treturn;');

@@ -11,16 +11,19 @@ program
   .option('-o --output <outputPath>', 'Where to store the output file')
   .option('--path-tracing', 'Calculate path metrics and expose progress property. Default to false')
   .option('--path-tracing-all', 'Calculate path metrics and expose progress property. Draw all path segments at once. Default to false')
+  .option('-d, --decimals <decimalPlaces>', 'Decimal places to use. Defaults to 2', 2)
   .action(function(filePath, options) {
     converter = new SvgToFlutterPathConverter();
     let tracing = options.pathTracing;
     let tracingAll = options.pathTracingAll;
+    let decimals = options.decimals;
 
     let config = {
       pathTracing: tracing,
-      pathTracingAll: tracingAll
+      pathTracingAll: tracingAll,
+      decimals: decimals,
     }
-    
+
     flutterPathString = converter.convertFromFilePath(filePath, config);
     let outputPath = options.output;
 
